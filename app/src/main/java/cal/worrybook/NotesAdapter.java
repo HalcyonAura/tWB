@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 
@@ -13,46 +14,55 @@ import java.util.List;
  * Created by C on 3/6/2018.
  */
 
-public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder>{
+public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>{
 
+    //List of saved notes
     private List<NotesBuilder> notesList;
-    private OnItemClickListener listener;
 
-    public interface OnItemClickListener {
-        void onItemClick(NotesBuilder notesList);
+    OnItemClickListener mItemClickListener;
+    public NotesAdapter(List<NotesBuilder> notes){
+        this.notesList = notes;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, content;
-
-        public MyViewHolder(View view) {
-            super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            content = (TextView) view.findViewById(R.id.content);
-
-        }
-    }
-
-    public NotesAdapter(List<NotesBuilder> notesList, OnItemClickListener listener) {
-        this.notesList = notesList;
-        this.listener = listener;
-    }
-
+    //Create new views through layout manager
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_row, parent, false);
 
-        return new MyViewHolder(itemView);
+        return new ViewHolder(itemView);
     }
 
-    @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+
+    public void onBindViewHolder(ViewHolder holder, int position) {
         NotesBuilder note = notesList.get(position);
         holder.title.setText(note.getTitle());
         holder.content.setText(note.getContent());
-        holder.bind(items.get(position), listener);
+    }
 
+    //Allows for reference for each note
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        public TextView title, content;
+        public ViewHolder(View itemLayoutView) {
+            super(itemLayoutView);
+            title = (TextView) itemLayoutView.findViewById(R.id.title);
+            content = (TextView) itemLayoutView.findViewById(R.id.content);
+            itemLayoutView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            System.out.println("onClick");
+            TextView tv = (TextView) v.findViewById(R.id.title);
+            String id = tv.getText().toString();
+            mItemClickListener.onItemClick(v, getAdapterPosition(), id); //OnItemClickListener mItemClickListener;
+        }
+    }
+    public interface OnItemClickListener {
+        public void onItemClick(View view, int position, String id);
+    }
+    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
+        this.mItemClickListener = mItemClickListener;
     }
 
     @Override
