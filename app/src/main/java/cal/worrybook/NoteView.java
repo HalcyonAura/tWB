@@ -26,16 +26,19 @@ public class NoteView extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        Intent intent = getIntent();
+        String fileName = intent.getStringExtra("fileName");
+
+        //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 save("Note1.txt");
             }
-        });
+        });*/
 
         EditText1 = (EditText) findViewById(R.id.EditText1);
-        EditText1.setText(Open("Note1.txt"));
+        EditText1.setText(Open(fileName));
     }
 
     @Override
@@ -95,6 +98,17 @@ public class NoteView extends AppCompatActivity {
                 Toast.makeText(this, "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
             }
         }
+        /*else{
+            content = "Write your worries here!";
+            try {
+                OutputStreamWriter out = new OutputStreamWriter(openFileOutput(fileName, 0));
+                out.write(content);
+                out.close();
+                Toast.makeText(this, "Note Saved!", Toast.LENGTH_SHORT).show();
+            } catch(Throwable t){
+                Toast.makeText(this, "Exception: " + t.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }*/
         return content;
     }
 

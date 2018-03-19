@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class NoteSelect extends AppCompatActivity {
     private List<NotesBuilder> notesList = new ArrayList<>();
     private NotesAdapter nAdapter;
     private RecyclerView notesRecycler;
+    private String defaultName = "Note";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +37,17 @@ public class NoteSelect extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+       /* fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+        });*/
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                newNote();
             }
         });
         notesRecycler = (RecyclerView) findViewById(R.id.notes);
@@ -57,7 +65,7 @@ public class NoteSelect extends AppCompatActivity {
             @Override
             public void onItemClick(View v, int position, String id) {
                 Log.d("onItemClick", id);
-
+                Intent intent = new Intent(NoteSelect.this, NoteView.class).putExtra("fileName",id);
             }
         });
     }
@@ -73,6 +81,25 @@ public class NoteSelect extends AppCompatActivity {
             notesList.add(note);
         }
 
+    }
+
+    public boolean FileExists(String fname){
+        File file = getBaseContext().getFileStreamPath(fname);
+        return file.exists();
+    }
+
+    public void newNote(){
+        int counter = 1;
+        try {
+            while(FileExists(defaultName + Integer.toString(counter)))
+                counter++;
+            OutputStreamWriter out = new OutputStreamWriter(openFileOutput(defaultName + Integer.toString(counter), 0));
+            out.write("Type your worries here!");
+            out.close();
+            Toast.makeText(this, "Note opened!", Toast.LENGTH_SHORT).show();
+        } catch(Throwable t){
+            Toast.makeText(this, "Exception: " + t.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public String Open(String fileName) {
