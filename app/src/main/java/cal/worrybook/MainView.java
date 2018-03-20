@@ -56,6 +56,8 @@ public class MainView extends AppCompatActivity {
                 newNote();
             }
         });
+
+        prepareNotes();
     }
 
     @Override
@@ -125,6 +127,7 @@ public class MainView extends AppCompatActivity {
         while (FileExists(fileName + Integer.toString(counter)))
             counter++;
         fileName = fileName + Integer.toString(counter);
+        //notesList.add(new Notes(fileName, ""));
         Intent intent = new Intent(this, NoteView.class).putExtra("fileName", fileName);
         startActivity(intent);
     }
