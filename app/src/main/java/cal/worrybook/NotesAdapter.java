@@ -3,9 +3,12 @@ package cal.worrybook;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -24,25 +27,35 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         this.mContext = mContext;
         this.notesList = notesList;
     }
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder {//implements View.OnClickListener{
         public TextView fileName, fileContent;
         private final Context context;
         public ViewHolder(View v){
             super(v);
+            /*v.setOnClickListener(new OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                   TextView tv = (TextView) v.findViewById(R.id.item_name);
+                   String id = tv.getText().toString();
+                   mItemClickListener.onItemClick(getLayoutPosition(), v, id);
+              }
+        });*/
             context = v.getContext();
             fileName = (TextView) v.findViewById(R.id.fileName);
             fileContent = (TextView) v.findViewById(R.id.fileContent);
-            v.setClickable(true);
-            v.setOnClickListener(this);
+        //Interesting... the following two sections of commented out things I apparently don't need...
+            //v.setClickable(true);
+            //v.setOnClickListener(this);
         }
 
-        @Override
+        /*@Override
         public void onClick(View view){
             final Intent intent;
             int position = getAdapterPosition();
+            Log.d("click",Integer.toString(position));
             intent = new Intent(context, NoteView.class).putExtra("fileName", notesList.get(position).getFileName());
             mContext.startActivity(intent);
-        }
+        }*/
     }
 
     // Needed by layout manager
@@ -59,19 +72,33 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(v, vh.getAdapterPosition());
+                //Why does this work... Hm...
+                //Log.i("adapterPos", Integer.toString(vh.getAdapterPosition()));
+                //listener.onItemClick(v, vh.getAdapterPosition());
+                //Log.i("made it", "made it");
+                final Intent intent;
+                int position = vh.getAdapterPosition();
+                Log.d("click",Integer.toString(position));
+                intent = new Intent(mContext, NoteView.class).putExtra("fileName", notesList.get(position).getFileName());
+                mContext.startActivity(intent);
             }
         });
+        Log.i("here", "secondstage");
         return vh;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.height = 150;
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         Notes note = notesList.get(position);
         holder.fileName.setText(note.getFileName());
         holder.fileContent.setText(note.getContent());
+        //holder.fileContent.setMaxHeight(100); //?
+        holder.itemView.setLayoutParams(params);
+
     }
 
     @Override
@@ -86,4 +113,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
     public interface itemClickListener {
         public void onItemClick(View v, int position);
     }
+    /*public void setOnItemClickListener(itemClickListener listener){
+        this.listener = listener;
+    }*/
 }

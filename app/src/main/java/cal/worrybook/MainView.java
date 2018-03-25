@@ -36,6 +36,7 @@ public class MainView extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        prepareNotes();
         //Instantiate Recycler
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -56,8 +57,6 @@ public class MainView extends AppCompatActivity {
                 newNote();
             }
         });
-
-        prepareNotes();
     }
 
     @Override
