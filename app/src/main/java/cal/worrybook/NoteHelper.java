@@ -17,14 +17,11 @@ import java.io.OutputStreamWriter;
  */
 
 public class NoteHelper {
-    private Context context;
-    public NoteHelper(Context context){
-        this.context = context;
-    }
+    public NoteHelper(){ }
 
-    public String Open(String fileName) {
+    public String Open(String fileName, Context context) {
         String content = "";
-        if (FileExists(fileName)) {
+        if (FileExists(fileName, context)) {
             try {
                 InputStream in = context.openFileInput(fileName);
                 if ( in != null) {
@@ -47,7 +44,7 @@ public class NoteHelper {
         return content;
     }
 
-    public String getFile(String fileName) {
+    public String getFile(String fileName, Context context) {
         String content = "";
         try {
             InputStream in = context.openFileInput(fileName);
@@ -68,7 +65,7 @@ public class NoteHelper {
 
         return content;
     }
-    public void Save(String fileName, String content) {
+    public void Save(String fileName, String content, Context context) {
         try {
             OutputStreamWriter out =
                     new OutputStreamWriter(context.openFileOutput(fileName, 0));
@@ -81,9 +78,9 @@ public class NoteHelper {
         }
     }
 
-    public boolean FileExists(String fname) {
-        //File file = getBaseContext().getFileStreamPath(fname);
-        File file = new File(fname);
+    public boolean FileExists(String fname, Context context) {
+        File file = context.getApplicationContext().getFileStreamPath(fname);
+        //File file = new File(fname);
         return file.exists();
     }
 }

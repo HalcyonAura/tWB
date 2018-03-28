@@ -36,7 +36,7 @@ public class MainView extends AppCompatActivity {
         setContentView(R.layout.activity_mainview);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        helper = new NoteHelper(this);
+        helper = new NoteHelper();
 
         //Get list of notes
         prepareNotes();
@@ -91,7 +91,7 @@ public class MainView extends AppCompatActivity {
         String theFile;
         for (int f = 1; f <= files.length; f++) {
             theFile = "Note" + f + ".txt";
-            Notes note = new Notes(theFile, helper.getFile(theFile));
+            Notes note = new Notes(theFile, helper.getFile(theFile, this));
             notesList.add(note);
         }
     }
@@ -99,7 +99,7 @@ public class MainView extends AppCompatActivity {
     public void newNote(){
         String fileName = "Note";
         int counter = 1;
-        while (helper.FileExists(fileName + Integer.toString(counter)))
+        while (helper.FileExists(fileName + Integer.toString(counter), this))
             counter++;
         fileName = fileName + Integer.toString(counter);
         //notesList.add(new Notes(fileName, ""));
