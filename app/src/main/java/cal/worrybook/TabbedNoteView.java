@@ -171,7 +171,16 @@ public class TabbedNoteView extends Activity implements ActionBar.TabListener {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch(position){
+                case 0:
+                    return WorriesFragment.newInstance();
+                case 1:
+                    return RationalFragment.newInstance();
+                case 2:
+                    return LabelsFragment.newInstance();
+                default:
+                    return null;
+            }
         }
 
         @Override
@@ -184,11 +193,11 @@ public class TabbedNoteView extends Activity implements ActionBar.TabListener {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "Worries";
                 case 1:
-                    return "SECTION 2";
+                    return "Rational";
                 case 2:
-                    return "SECTION 3";
+                    return "Labels";
             }
             return null;
         }

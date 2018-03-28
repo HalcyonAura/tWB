@@ -15,14 +15,16 @@ import java.io.OutputStreamWriter;
 public class NoteView extends AppCompatActivity {
     EditText mainText;
     private String fileName;
+    NoteHelper helper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_noteview);
         Intent intent = getIntent();
+        helper = new NoteHelper(this);
         fileName = intent.getStringExtra("fileName");
         mainText = (EditText) findViewById(R.id.mainText);
-        mainText.setText(Open(fileName));
+        mainText.setText(helper.Open(fileName));
     }
 
     public void Save(String fileName) {
@@ -39,7 +41,7 @@ public class NoteView extends AppCompatActivity {
 
     public String Open(String fileName) {
         String content = "";
-        if (FileExists(fileName)) {
+        if (helper.FileExists(fileName)) {
             try {
                 InputStream in = openFileInput(fileName);
                 if ( in != null) {
@@ -69,7 +71,7 @@ public class NoteView extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        Save(fileName);
+        helper.Save(fileName, mainText.getText().toString());
         Intent intent = new Intent(this, MainView.class);
         startActivity(intent);
     }

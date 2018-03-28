@@ -21,7 +21,33 @@ public class NoteHelper {
     public NoteHelper(Context context){
         this.context = context;
     }
+
     public String Open(String fileName) {
+        String content = "";
+        if (FileExists(fileName)) {
+            try {
+                InputStream in = context.openFileInput(fileName);
+                if ( in != null) {
+                    InputStreamReader tmp = new InputStreamReader( in );
+                    BufferedReader reader = new BufferedReader(tmp);
+                    String str;
+                    StringBuilder buf = new StringBuilder();
+                    while ((str = reader.readLine()) != null) {
+                        buf.append(str + "\n");
+                    } in .close();
+                    content = buf.toString();
+                }
+            } catch (java.io.FileNotFoundException e) {} catch (Throwable t) {
+                Toast.makeText(context, "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
+            }
+        }
+        else{
+            content = "";
+        }
+        return content;
+    }
+
+    public String getFile(String fileName) {
         String content = "";
         try {
             InputStream in = context.openFileInput(fileName);

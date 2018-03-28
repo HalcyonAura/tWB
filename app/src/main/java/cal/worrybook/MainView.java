@@ -28,6 +28,7 @@ public class MainView extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private List<Notes> notesList = new ArrayList<>();
+    private NoteHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +36,11 @@ public class MainView extends AppCompatActivity {
         setContentView(R.layout.activity_mainview);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        helper = new NoteHelper(this);
 
+        //Get list of notes
         prepareNotes();
+
         //Instantiate Recycler
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -53,7 +57,6 @@ public class MainView extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("test", "test");
                 newNote();
             }
         });
@@ -88,42 +91,15 @@ public class MainView extends AppCompatActivity {
         String theFile;
         for (int f = 1; f <= files.length; f++) {
             theFile = "Note" + f + ".txt";
-            Notes note = new Notes(theFile, Open(theFile));
+            Notes note = new Notes(theFile, helper.getFile(theFile));
             notesList.add(note);
         }
-
-    }
-    public String Open(String fileName) {
-        String content = "";
-        try {
-            InputStream in = openFileInput(fileName);
-            if ( in != null) {
-                InputStreamReader tmp = new InputStreamReader( in );
-                BufferedReader reader = new BufferedReader(tmp);
-                String str;
-                StringBuilder buf = new StringBuilder();
-                while ((str = reader.readLine()) != null) {
-                    buf.append(str + "\n");
-                } in .close();
-
-                content = buf.toString();
-            }
-        } catch (java.io.FileNotFoundException e) {} catch (Throwable t) {
-            Toast.makeText(this, "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
-        }
-
-        return content;
-    }
-
-    public boolean FileExists(String fname) {
-        File file = getBaseContext().getFileStreamPath(fname);
-        return file.exists();
     }
 
     public void newNote(){
         String fileName = "Note";
         int counter = 1;
-        while (FileExists(fileName + Integer.toString(counter)))
+        while (helper.FileExists(fileName + Integer.toString(counter)))
             counter++;
         fileName = fileName + Integer.toString(counter);
         //notesList.add(new Notes(fileName, ""));
