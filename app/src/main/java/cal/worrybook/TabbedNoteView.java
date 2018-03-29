@@ -150,9 +150,9 @@ public class TabbedNoteView extends AppCompatActivity implements ActionBar.TabLi
                 case 0:
                     Log.d("New instance", "here");
                     return WorriesFragment.newInstance(fileName, helper.Open(fileName, getApplicationContext()));
-                /*case 1:
-                    return RationalFragment.newInstance(fileName);
-                case 2:
+                case 1:
+                    return RationalFragment.newInstance(fileName, helper.Open(fileName, getApplicationContext()));
+                /*case 2:
                     return LabelsFragment.newInstance(fileName);
                 */default:
                     return null;
@@ -162,7 +162,7 @@ public class TabbedNoteView extends AppCompatActivity implements ActionBar.TabLi
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 1;
+            return 2;
         }
 
         @Override
@@ -170,9 +170,9 @@ public class TabbedNoteView extends AppCompatActivity implements ActionBar.TabLi
             switch (position) {
                 case 0:
                     return "Worries";
-                /*case 1:
+                case 1:
                     return "Rational";
-                case 2:
+                /*case 2:
                     return "Labels";
             */}
             return null;
