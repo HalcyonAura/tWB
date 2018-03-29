@@ -103,7 +103,8 @@ public class MainView extends AppCompatActivity {
             counter++;
         fileName = fileName + Integer.toString(counter);
         //notesList.add(new Notes(fileName, ""));
-        Intent intent = new Intent(this, NoteView.class).putExtra("fileName", fileName);
+        //Intent intent = new Intent(this, NoteView.class).putExtra("fileName", fileName);
+        Intent intent = new Intent(this, TabbedNoteView.class).putExtra("fileName", fileName);
         startActivity(intent);
     }
 

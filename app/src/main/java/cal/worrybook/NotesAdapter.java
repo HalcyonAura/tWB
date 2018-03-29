@@ -79,7 +79,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
                 final Intent intent;
                 int position = vh.getAdapterPosition();
                 Log.d("click",Integer.toString(position));
-                intent = new Intent(mContext, NoteView.class).putExtra("fileName", notesList.get(position).getFileName());
+                //intent = new Intent(mContext, NoteView.class).putExtra("fileName", notesList.get(position).getFileName());
+                Log.d("filename", notesList.get(position).getFileName());
+                intent = new Intent(mContext, TabbedNoteView.class).putExtra("fileName", notesList.get(position).getFileName());
                 mContext.startActivity(intent);
             }
         });

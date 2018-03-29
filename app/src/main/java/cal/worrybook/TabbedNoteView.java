@@ -2,8 +2,8 @@ package cal.worrybook;
 
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v4.app.FragmentTransaction;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,10 +44,11 @@ public class TabbedNoteView extends AppCompatActivity implements ActionBar.TabLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabbednoteview);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         fileName = intent.getStringExtra("fileName");
+        Log.d("tabbed file", fileName);
         helper = new NoteHelper();
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -57,7 +59,7 @@ public class TabbedNoteView extends AppCompatActivity implements ActionBar.TabLi
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         // Set up the action bar.
-        final ActionBar actionBar = getActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // When swiping between different sections, select the corresponding
@@ -87,7 +89,6 @@ public class TabbedNoteView extends AppCompatActivity implements ActionBar.TabLi
 
     @Override
     public void onBackPressed(){
-        //helper.Save(fileName, this);
         Intent intent = new Intent(this, MainView.class);
         startActivity(intent);
     }
@@ -105,11 +106,12 @@ public class TabbedNoteView extends AppCompatActivity implements ActionBar.TabLi
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
+        /*if (id == R.id.action_save) {
+            return true;
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
@@ -143,10 +145,11 @@ public class TabbedNoteView extends AppCompatActivity implements ActionBar.TabLi
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
+            // Return a specified Fragment.
             switch(position){
                 case 0:
-                    return WorriesFragment.newInstance(fileName);
+                    Log.d("New instance", "here");
+                    return WorriesFragment.newInstance(fileName, helper.Open(fileName, getApplicationContext()));
                 /*case 1:
                     return RationalFragment.newInstance(fileName);
                 case 2:
@@ -167,11 +170,11 @@ public class TabbedNoteView extends AppCompatActivity implements ActionBar.TabLi
             switch (position) {
                 case 0:
                     return "Worries";
-                case 1:
+                /*case 1:
                     return "Rational";
                 case 2:
                     return "Labels";
-            }
+            */}
             return null;
         }
     }

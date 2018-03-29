@@ -26,7 +26,7 @@ public class NoteView extends AppCompatActivity {
         mainText = (EditText) findViewById(R.id.mainText);
         mainText.setText(helper.Open(fileName, this));
     }
-    
+
     @Override
     public void onBackPressed(){
         helper.Save(fileName, mainText.getText().toString(), this);
